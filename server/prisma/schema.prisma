@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Feature: Cadastro de Fornecedor
+model Fornecedor {
+  id              String   @id @default(uuid())
+  nomeEmpresa     String
+  cnpj            String   @unique // BDD: "sistema não deve permitir cadastro... CNPJ já existente"
+  endereco        String
+  telefone        String
+  email           String
+  contatoPrincipal String
+  
+  // Relacionamento (Um fornecedor pode ter vários produtos associados)
+  produtos        ProdutoFornecedor[]
+
+  createdAt       DateTime @default(now())
+}
+
+// Feature: Cadastro de Produtos
+model Produto {
+  id              String   @id @default(uuid())
+  nome            String
+  codigoBarras    String   @unique // BDD: "sistema não deve permitir... código de barras já existente"
+  descricao       String
+  quantidade      Int
+  categoria       String
+  dataValidade    DateTime? // Opcional ("se aplicável")
+  imagem          String?   // Opcional ("se aplicável") - Salvaremos a URL/Caminho
+  
+  // Relacionamento (Um produto pode ter vários fornecedores)
+  fornecedores    ProdutoFornecedor[]
+
+  createdAt       DateTime @default(now())
+}
+
+// Tabela Pivô para Associação (Feature: Associação de Fornecedor a Produto)
+model ProdutoFornecedor {
+  produto       Produto    @relation(fields: [produtoId], references: [id])
+  produtoId     String
+  
+  fornecedor    Fornecedor @relation(fields: [fornecedorId], references: [id])
+  fornecedorId  String
+
+  assignedAt    DateTime   @default(now())
+
+  // Chave composta para garantir que não associe o mesmo fornecedor ao mesmo produto 2x
+  @@id([produtoId, fornecedorId]) 
+}
