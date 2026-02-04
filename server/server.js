@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Configurações para ler pastas no ES Modules (necessário para o __dirname)
+// Configuração para __dirname em ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,18 +21,15 @@ app.post('/fornecedores', async (req, res) => {
   try {
     const { nomeEmpresa, cnpj, endereco, telefone, email, contatoPrincipal } = req.body;
 
-    // Validação básica (Campos obrigatórios)
     if (!nomeEmpresa || !cnpj || !endereco || !telefone || !email || !contatoPrincipal) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
     }
 
-    // Verificar CNPJ duplicado
     const existe = await prisma.fornecedor.findUnique({ where: { cnpj } });
     if (existe) {
       return res.status(409).json({ error: 'Fornecedor com esse CNPJ já está cadastrado!' });
     }
 
-    // Criar Fornecedor
     const fornecedor = await prisma.fornecedor.create({
       data: { nomeEmpresa, cnpj, endereco, telefone, email, contatoPrincipal }
     });
@@ -56,18 +53,15 @@ app.post('/produtos', async (req, res) => {
   try {
     const { nome, codigoBarras, descricao, quantidade, categoria, dataValidade, imagem } = req.body;
 
-    // Validação
     if (!nome || !codigoBarras || !descricao || quantidade === undefined || !categoria) {
       return res.status(400).json({ error: 'Campos obrigatórios inválidos ou em branco.' });
     }
 
-    // Verificar Código de Barras duplicado
     const existe = await prisma.produto.findUnique({ where: { codigoBarras } });
     if (existe) {
       return res.status(409).json({ error: 'Produto com este código de barras já está cadastrado!' });
     }
 
-    // Criar Produto
     const produto = await prisma.produto.create({
       data: {
         nome,
@@ -96,12 +90,11 @@ app.get('/produtos', async (req, res) => {
 
 // --- ROTAS DE ASSOCIAÇÃO ---
 
-// 3. Associar Fornecedor a Produto
+// 3. Associar
 app.post('/associacao', async (req, res) => {
   try {
     const { produtoId, fornecedorId } = req.body;
 
-    // Verificar se já existe a associação
     const existe = await prisma.produtoFornecedor.findUnique({
       where: {
         produtoId_fornecedorId: { produtoId, fornecedorId }
@@ -112,7 +105,6 @@ app.post('/associacao', async (req, res) => {
       return res.status(409).json({ error: 'Fornecedor já está associado a este produto!' });
     }
 
-    // Criar Associação
     await prisma.produtoFornecedor.create({
       data: { produtoId, fornecedorId }
     });
@@ -141,15 +133,15 @@ app.delete('/associacao', async (req, res) => {
   }
 });
 
-// --- SERVIR O FRONTEND (React) ---
-
+// --- SERVIR ARQUIVOS DO FRONTEND ---
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Rota Curinga com REGEX para evitar erro no Render/Node novo
 app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// --- INICIALIZAR O SERVIDOR ---
-const PORT = process.env.PORT || 3000; 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
