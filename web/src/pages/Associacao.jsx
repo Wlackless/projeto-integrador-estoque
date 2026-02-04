@@ -42,7 +42,6 @@ function Associacao() {
   };
 
   const handleDesassociarClick = (produtoId, fornecedorId) => {
-    // Abre o modal de confirmação em vez de deletar direto
     setConfirmModal({ open: true, item: { produtoId, fornecedorId } });
   };
 

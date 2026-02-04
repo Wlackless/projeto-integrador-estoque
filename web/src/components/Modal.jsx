@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Props: isOpen (bool), onClose (func), title (string), message (string), onConfirm (func - opcional)
+
 export default function Modal({ isOpen, onClose, title, message, onConfirm }) {
   if (!isOpen) return null;
 

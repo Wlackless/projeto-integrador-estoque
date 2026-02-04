@@ -27,7 +27,7 @@ body {
 /* Navegação */
 nav {
   display: flex;
-  justify-content: center; /* Centraliza o menu */
+  justify-content: center;
   gap: 2rem;
   margin-bottom: 3rem;
   padding-bottom: 1rem;
@@ -47,7 +47,7 @@ nav a:hover, nav a.active {
 
 /* Títulos */
 h2 {
-  text-align: center; /* Centraliza o título da página */
+  text-align: center; 
   margin-bottom: 2rem;
   font-size: 1.5rem;
 }
@@ -73,7 +73,7 @@ h2 {
   border-color: var(--primary);
 }
 
-/* Formulários (Onde estava o bug) */
+
 form {
   display: flex;
   flex-direction: column;
@@ -83,13 +83,11 @@ form {
   border-radius: 8px;
   max-width: 500px;
   border: 1px solid var(--border);
-  
-  /* CORREÇÃO DE CENTRALIZAÇÃO */
   margin: 0 auto; 
 }
 
 input, select, textarea {
-  /* CORREÇÃO DOS INPUTS BUGADOS */
+ 
   width: 100%; 
   
   background: #121214;
@@ -107,7 +105,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Botões */
 button {
-  width: 100%; /* Botão ocupa largura total */
+  width: 100%;
   background: var(--primary);
   color: white;
   border: 0;

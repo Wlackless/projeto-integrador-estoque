@@ -4,7 +4,7 @@ import CadastroFornecedor from './pages/CadastroFornecedor';
 import CadastroProduto from './pages/CadastroProduto';
 import Associacao from './pages/Associacao';
 
-// Componente auxiliar para destacar link ativo
+
 function NavBar() {
   const location = useLocation();
   const isActive = (path) => location.pathname === path ? 'active' : '';
