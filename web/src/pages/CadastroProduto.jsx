@@ -13,7 +13,8 @@ function CadastroProduto() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/produtos', form);
+      // Caminho relativo
+      await axios.post('/produtos', form);
       setModal({ open: true, title: 'Sucesso!', message: 'Produto cadastrado no estoque.' });
       setForm({ nome: '', codigoBarras: '', descricao: '', quantidade: '', categoria: '', dataValidade: '', imagem: '' });
     } catch (error) {

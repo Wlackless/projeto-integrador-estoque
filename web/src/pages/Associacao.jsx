@@ -8,14 +8,14 @@ function Associacao() {
   const [selectedProduto, setSelectedProduto] = useState('');
   const [selectedFornecedor, setSelectedFornecedor] = useState('');
   
-  // Modais
   const [infoModal, setInfoModal] = useState({ open: false, title: '', message: '' });
   const [confirmModal, setConfirmModal] = useState({ open: false, item: null });
 
   const fetchData = async () => {
     try {
-      const prodRes = await axios.get('http://localhost:3000/produtos');
-      const fornRes = await axios.get('http://localhost:3000/fornecedores');
+      // Caminhos relativos
+      const prodRes = await axios.get('/produtos');
+      const fornRes = await axios.get('/fornecedores');
       setProdutos(prodRes.data);
       setFornecedores(fornRes.data);
     } catch (error) {
@@ -30,7 +30,7 @@ function Associacao() {
         return setInfoModal({ open: true, title: 'Atenção', message: 'Selecione um produto e um fornecedor.' });
     }
     try {
-      await axios.post('http://localhost:3000/associacao', {
+      await axios.post('/associacao', {
         produtoId: selectedProduto,
         fornecedorId: selectedFornecedor
       });
@@ -48,7 +48,7 @@ function Associacao() {
   const confirmDesassociar = async () => {
     if (!confirmModal.item) return;
     try {
-      await axios.delete('http://localhost:3000/associacao', {
+      await axios.delete('/associacao', {
         data: confirmModal.item
       });
       fetchData();
@@ -118,10 +118,8 @@ function Associacao() {
         </div>
       )}
 
-      {/* Modal de Informação (Sucesso/Erro) */}
       <Modal isOpen={infoModal.open} onClose={() => setInfoModal({...infoModal, open: false})} title={infoModal.title} message={infoModal.message} />
 
-      {/* Modal de Confirmação (Sim/Não) */}
       <Modal 
         isOpen={confirmModal.open} 
         onClose={() => setConfirmModal({ open: false, item: null })} 

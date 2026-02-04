@@ -7,7 +7,6 @@ function CadastroFornecedor() {
     nomeEmpresa: '', cnpj: '', endereco: '', telefone: '', email: '', contatoPrincipal: ''
   });
   
-  // Estado do Modal
   const [modal, setModal] = useState({ open: false, title: '', message: '', type: 'info' });
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,7 +14,8 @@ function CadastroFornecedor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/fornecedores', form);
+      // Caminho relativo (sem http://localhost)
+      await axios.post('/fornecedores', form);
       setModal({ open: true, title: 'Sucesso!', message: 'Fornecedor cadastrado com sucesso.' });
       setForm({ nomeEmpresa: '', cnpj: '', endereco: '', telefone: '', email: '', contatoPrincipal: '' });
     } catch (error) {
